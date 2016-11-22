@@ -1,4 +1,4 @@
-package com.xu.myWechat.util;
+package com.xu.myWechat.common.util;
 
 import org.apache.commons.codec.binary.Base64;
 

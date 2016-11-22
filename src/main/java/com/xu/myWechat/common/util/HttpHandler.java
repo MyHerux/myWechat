@@ -1,4 +1,4 @@
-package com.xu.myWechat.util;
+package com.xu.myWechat.common.util;
 
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
