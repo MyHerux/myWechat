@@ -9,6 +9,7 @@ package com.xu.myWechat.common.bean;
 public enum ExceptionType {
 
     SUCCESS("00","success"),
+    USER_ERROR("500001","用户错误"),
     ADD_ERROR("500007","添加失败");
 
     private String code;
