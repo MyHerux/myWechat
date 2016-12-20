@@ -24,12 +24,14 @@ public class JsonHandlerExceptionResolver implements HandlerExceptionResolver {
 
 
     @ResponseBody
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) {
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
+                                         Object handler, Exception exception) {
         ModelAndView mv = new ModelAndView();
         Map<String, String[]> parameterMap = request.getParameterMap();
         logException(handler, exception, parameterMap);
         JSONObject result = Response.json(exception);
         try {
+            response.setHeader("Content-type", "application/json;charset=UTF-8");
             response.getWriter().write(result.toString());
         } catch (IOException e) {
             e.printStackTrace();
