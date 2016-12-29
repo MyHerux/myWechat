@@ -5,13 +5,9 @@ import com.xu.myWechat.common.util.Aes;
 import com.xu.myWechat.common.util.HttpHandler;
 import com.xu.myWechat.common.util.Md5;
 import com.xu.myWechat.exception.BusinessException;
-import com.xu.myWechat.mapper.BotXMapper;
-import com.xu.myWechat.pojo.dao.BotX;
-import io.swagger.annotations.*;
 import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,23 +23,6 @@ public class BotController {
 
     private Logger logger = LogManager.getLogger();
 
-    private final BotXMapper botXMapper;
-
-    @Autowired
-    public BotController(BotXMapper botXMapper) {
-        this.botXMapper = botXMapper;
-    }
-
-    @ApiOperation(value = "获取用户信息",response = String.class, notes = "根据用户名获取用户服务信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "username", dataType = "String", required = true, value = "用户的姓名"),
-            @ApiImplicitParam(paramType = "query", name = "password", dataType = "String", required = true, value = "用户的密码"),
-            @ApiImplicitParam(paramType = "query", name = "str", dataType = "String", required = true, value = "用户数据")
-    })
-    @ApiResponses({
-            @ApiResponse(code = 400, message = "请求参数没填好"),
-            @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
-    })
     @RequestMapping(value = "/doudou", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public String doudou(@RequestParam("str") String str) throws Exception {
         if (str == null) throw new BusinessException(ExceptionType.USER_ERROR);
@@ -73,15 +52,8 @@ public class BotController {
         json.put("timestamp", timestamp);
         json.put("data", data);
         //请求图灵api
-        String result = HttpHandler.post("http://www.tuling123.com/openapi/api", json.toString());
+        JSONObject result = JSONObject.fromObject(HttpHandler.post("http://www.tuling123.com/openapi/api", json.toString()));
         logger.info(result);
-        return result;
-    }
-
-    @RequestMapping(value = "/xuhua", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public String xuhua() throws Exception {
-        BotX botX = botXMapper.findById(1);
-        logger.info(botX.getName());
-        return botX.getName();
+        return result.getString("text");
     }
 }
