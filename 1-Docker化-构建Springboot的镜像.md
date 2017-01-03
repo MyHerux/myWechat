@@ -1,6 +1,7 @@
 # Docker化-构建Springboot的镜像
 ## 准备SpringBoot项目
 - 略
+
 ## Dockerfile常用命令
 - FROM — 指定基础镜像
 ```
