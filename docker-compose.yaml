@@ -1,0 +1,11 @@
+web:
+  build: .
+  ports:
+    - "8080:8080"
+  links:
+    - mongodb:mongodb
+
+mongodb:
+  image: daocloud.io/library/mongo:latest
+  ports:
+    - "27017:27017"
