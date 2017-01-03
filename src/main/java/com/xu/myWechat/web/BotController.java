@@ -1,17 +1,24 @@
 package com.xu.myWechat.web;
 
+import com.xu.myWechat.VisitorRepository;
 import com.xu.myWechat.common.bean.ExceptionType;
 import com.xu.myWechat.common.util.Aes;
 import com.xu.myWechat.common.util.HttpHandler;
 import com.xu.myWechat.common.util.Md5;
 import com.xu.myWechat.exception.BusinessException;
+import com.xu.myWechat.pojo.dao.Visitor;
 import net.sf.json.JSONObject;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author xu
@@ -20,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/bot")
 public class BotController {
+
+    @Resource
+    VisitorRepository visitorRepository;
 
     private Logger logger = LogManager.getLogger();
 
@@ -55,5 +65,21 @@ public class BotController {
         JSONObject result = JSONObject.fromObject(HttpHandler.post("http://www.tuling123.com/openapi/api", json.toString()));
         logger.info(result);
         return result.getString("text");
+    }
+
+    @RequestMapping("/mongo")
+    public String visit(HttpServletRequest request){
+
+        Visitor visitor = new Visitor();
+        visitor.setId(UUID.randomUUID().toString());
+        visitor.setIp(request.getRemoteAddr());
+        visitor.setVisitDate(new Date());
+
+
+        visitorRepository.save(visitor);
+
+        Long count =  visitorRepository.count();
+
+        return String.format("你是来自%s的第%d位访问者。",request.getRemoteAddr(),count);
     }
 }
