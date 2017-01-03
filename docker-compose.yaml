@@ -4,7 +4,7 @@ web:
     - "8080:8080"
   links:
     - mongodb:mongodb
-
+  command: java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
 mongodb:
   image: daocloud.io/library/mongo:latest
   ports:
