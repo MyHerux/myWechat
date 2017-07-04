@@ -95,7 +95,7 @@ ONBUILD [instruction]
 ## 构建Docker镜像
 - 进入应用根目录，构建Docker镜像
 ```
-docker build -t [项目名]
+docker build -t [项目名] .
 ```
 - 从镜像启动容器
 ```
